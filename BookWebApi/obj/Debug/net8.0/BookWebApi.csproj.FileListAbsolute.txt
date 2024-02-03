@@ -103,3 +103,6 @@
 /Users/cihaterdogmak/code/TechCareer.net-final-project/BookWebApi/obj/Debug/net8.0/BookWebApi.pdb
 /Users/cihaterdogmak/code/TechCareer.net-final-project/BookWebApi/obj/Debug/net8.0/BookWebApi.genruntimeconfig.cache
 /Users/cihaterdogmak/code/TechCareer.net-final-project/BookWebApi/obj/Debug/net8.0/ref/BookWebApi.dll
+/Users/cihaterdogmak/code/TechCareer.net-final-project/BookWebApi/obj/Debug/net8.0/BookWebApi.sourcelink.json
+/Users/cihaterdogmak/code/TechCareer.net-final-project/BookWebApi/bin/Debug/net8.0/AutoMapper.dll
+/Users/cihaterdogmak/code/TechCareer.net-final-project/BookWebApi/bin/Debug/net8.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
