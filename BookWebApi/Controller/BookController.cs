@@ -39,8 +39,10 @@ public class BookController : ControllerBase
         //     Title = dto.Title
         // };
 
-        Book book = _mapper.Map<Book>(dto);
-        
+        //Ikinci Yöntem
+        // Book book = _mapper.Map<Book>(dto);
+
+        Book book = dto;
         
         _context.Books.Add(book);
         _context.SaveChanges();
@@ -84,13 +86,20 @@ public class BookController : ControllerBase
         {
             return NotFound();
         }
-        book.Title = dto.Title;
-        book.CategoryName = dto.CategoryName;
-        book.AuthorName = dto.AuthorName;
-        book.Description = dto.Description;
-        book.Price = dto.Price;
-        book.Stock = dto.Stock;
+        //1.yöntem
+        // book.Title = dto.Title;
+        // book.CategoryName = dto.CategoryName;
+        // book.AuthorName = dto.AuthorName;
+        // book.Description = dto.Description;
+        // book.Price = dto.Price;
+        // book.Stock = dto.Stock;
 
+        //2.yöntem
+        book = dto;
+        
+        //3.yöntem
+        book = _mapper.Map<Book>(dto);        
+        
         _context.SaveChanges();
         return Ok(book);
     }
