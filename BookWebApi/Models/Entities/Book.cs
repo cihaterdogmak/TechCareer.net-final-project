@@ -6,37 +6,40 @@ public class Book : Entity
 {
     public string Title { get; set; }
     public string Description { get; set; }
-    public string AuthorName { get; set; }
-    public string CategoryName { get; set; }
     public double Price { get; set; }
     public int Stock { get; set; }
-
-
-    public static implicit operator Book(BookAddRequestDto dto)
-    {
-        return new Book()
-        {
-            Title = dto.Title,
-            Description = dto.Description,
-            AuthorName = dto.AuthorName,
-            CategoryName = dto.CategoryName,
-            Price = dto.Price,
-            Stock = dto.Stock,
-        };
-    }
-
-    //static implicit operator yöntemi 2. yöntem (star)
-    public static implicit operator Book(BookUpdateRequestDto dto)
-    {
-        return new Book()
-        {
-            Title = dto.Title,
-            Description = dto.Description,
-            AuthorName = dto.AuthorName,
-            CategoryName = dto.CategoryName,
-            Price = dto.Price,
-            Stock = dto.Stock,
-            Id = dto.Id
-        };
-    }
+    
+    public int CategoryId { get; set; }
+    public Category Category { get; set; }
+    
+    public string AuthorId { get; set; }
+    public Author Author { get; set; }
+    
+    // public static implicit operator Book(BookAddRequestDto dto)
+    // {
+    //     return new Book()
+    //     {
+    //         Title = dto.Title,
+    //         Description = dto.Description,
+    //         AuthorName = dto.AuthorName,
+    //         CategoryName = dto.CategoryName,
+    //         Price = dto.Price,
+    //         Stock = dto.Stock,
+    //     };
+    // }
+    //
+    // //static implicit operator yöntemi 2. yöntem (star)
+    // public static implicit operator Book(BookUpdateRequestDto dto)
+    // {
+    //     return new Book()
+    //     {
+    //         Title = dto.Title,
+    //         Description = dto.Description,
+    //         AuthorName = dto.AuthorName,
+    //         CategoryName = dto.CategoryName,
+    //         Price = dto.Price,
+    //         Stock = dto.Stock,
+    //         Id = dto.Id
+    //     };
+    // }
 }
