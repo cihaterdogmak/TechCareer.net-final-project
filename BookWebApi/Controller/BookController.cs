@@ -1,4 +1,7 @@
 
+using BookWebApi.Models.Dtos.RequestDto;
+using BookWebApi.Models.Entities;
+using BookWebApi.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookWebApi.Controller;
@@ -12,93 +15,67 @@ namespace BookWebApi.Controller;
 [ApiController]
 public class BookController : ControllerBase
 {
-    // //constructor args dependency ınjection
-    // private readonly BaseDbContext _context;
-    // private readonly IMapper _mapper;
-    //
-    // public BookController(BaseDbContext context, IMapper mapper)
-    // {
-    //     _context = context; 
-    //     _mapper = mapper;
-    // }
-    //
-    // [HttpPost("add")]
-    // public IActionResult Add([FromBody] BookAddRequestDto dto)
-    // {
-    //     //Birinci Yöntem
-    //     // Book book = new Book()
-    //     // {
-    //     //     AuthorName = dto.AuthorName,
-    //     //     Price = dto.Price,
-    //     //     CategoryName = dto.CategoryName,
-    //     //     Description = dto.Description,
-    //     //     Stock = dto.Stock,
-    //     //     Title = dto.Title
-    //     // };
-    //
-    //     //Ikinci Yöntem
-    //     // Book book = _mapper.Map<Book>(dto);
-    //
-    //     Book book = dto;
-    //     
-    //     _context.Books.Add(book);
-    //     _context.SaveChanges();
-    //
-    //     return Ok("Ekleme başarılı");
-    // }
-    //
-    // [HttpGet("getall")]
-    // public IActionResult GetAll()
-    // {
-    //     List<Book> books = _context.Books.ToList();
-    //     return Ok(books);
-    // }
-    //
-    // [HttpGet("getbyid")]
-    // public IActionResult GetById([FromQuery] int id)
-    // {
-    //     Book book = _context.Books.Find(id);
-    //     return Ok(book);
-    // }
-    //
-    // [HttpGet("getbystockrange")]
-    // public IActionResult GetByStockRange([FromQuery] int min, [FromQuery] int max)
-    // {
-    //     List<Book> books = _context.Books.Where(x=> x.Stock < max && x.Stock > min).ToList();
-    //     return Ok(books);
-    // }
-    //
-    // [HttpGet("getbypricerange")]
-    // public IActionResult GetByPriceRange([FromQuery] double min, [FromQuery] double max)
-    // {
-    //     List<Book> books = _context.Books.Where(x => x.Price < max && x.Price > min).ToList();
-    //     return Ok(books);
-    // }
-    //
-    // [HttpPost("update")]
-    // public IActionResult Update([FromBody] BookUpdateRequestDto dto)
-    // {
-    //     Book? book = _context.Books.Find(dto.Id);
-    //     if (book == null)
-    //     {
-    //         return NotFound();
-    //     }
-    //     //1.yöntem
-    //     // book.Title = dto.Title;
-    //     // book.CategoryName = dto.CategoryName;
-    //     // book.AuthorName = dto.AuthorName;
-    //     // book.Description = dto.Description;
-    //     // book.Price = dto.Price;
-    //     // book.Stock = dto.Stock;
-    //
-    //     //2.yöntem
-    //     book = dto;
-    //     
-    //     //3.yöntem
-    //     book = _mapper.Map<Book>(dto);        
-    //     
-    //     _context.SaveChanges();
-    //     return Ok(book);
-    // }
+    
+    private readonly IBookService _service;
+    public BookController(IBookService service)
+    {
+        _service = service;
+    }
+
+    [HttpGet("getall")]
+    public IActionResult GetAll()
+    {
+        List<Book> books = _service.GetAll();
+        return Ok(books);
+    }
+    
+    [HttpGet("getbyid")]
+    public IActionResult GetById([FromQuery] int id)
+    {
+        Book book = _service.GetById(id);
+        return Ok(book);
+    }
+
+    [HttpPut("update")]
+    public IActionResult Update([FromBody] BookUpdateRequestDto dto)
+    {
+        _service.Update(dto);
+        return Ok("Güncelleme Başarılı.");
+    }
+
+    [HttpPost("add")]
+    public IActionResult Add([FromBody] BookAddRequestDto dto)
+    {
+        _service.Add(dto);
+        return Ok("Ekleme başarılı.");
+    }
+
+    [HttpDelete("delete")]
+    public IActionResult Delete([FromQuery] int id)
+    {
+        _service.Delete(id);
+        return Ok("Silme başarılı.");
+    }
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

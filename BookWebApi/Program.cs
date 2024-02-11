@@ -1,5 +1,7 @@
 using System.Reflection;
 using BookWebApi.Repository;
+using BookWebApi.Service.Concrete;
+using BookWebApi.Service.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 // Kitap Yazar ve Kategorilerle alakalı CRUD operasyonları
@@ -7,6 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+//myServices
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 builder.Services.AddDbContext<BaseDbContext>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
