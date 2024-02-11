@@ -46,11 +46,7 @@ namespace BookWebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("AuthorId1")
+                    b.Property<int>("AuthorId")
                         .HasColumnType("integer");
 
                     b.Property<int>("CategoryId")
@@ -72,7 +68,7 @@ namespace BookWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId1");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
 
@@ -100,7 +96,7 @@ namespace BookWebApi.Migrations
                 {
                     b.HasOne("BookWebApi.Models.Entities.Author", "Author")
                         .WithMany("Books")
-                        .HasForeignKey("AuthorId1")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

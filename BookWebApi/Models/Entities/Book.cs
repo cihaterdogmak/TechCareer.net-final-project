@@ -2,18 +2,32 @@ using BookWebApi.Models.Dtos.RequestDto;
 
 namespace BookWebApi.Models.Entities;
 
+
 public class Book : Entity
 {
     public string Title { get; set; }
     public string Description { get; set; }
     public double Price { get; set; }
     public int Stock { get; set; }
-    
+
     public int CategoryId { get; set; }
     public Category Category { get; set; }
     
-    public string AuthorId { get; set; }
+    public int AuthorId { get; set; }
     public Author Author { get; set; }
+    
+// public class Book : Entity
+// {
+//     public string Title { get; set; }
+//     public string Description { get; set; }
+//     public double Price { get; set; }
+//     public int Stock { get; set; }
+//     
+//     public int CategoryId { get; set; }
+//     public Category Category { get; set; }
+//     
+//     public string AuthorId { get; set; }
+//     public Author Author { get; set; }
     
     // public static implicit operator Book(BookAddRequestDto dto)
     // {

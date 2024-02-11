@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookWebApi.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20240207234138_Second")]
-    partial class Second
+    [Migration("20240211144003_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,11 +49,7 @@ namespace BookWebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("AuthorId1")
+                    b.Property<int>("AuthorId")
                         .HasColumnType("integer");
 
                     b.Property<int>("CategoryId")
@@ -75,7 +71,7 @@ namespace BookWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId1");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
 
@@ -103,7 +99,7 @@ namespace BookWebApi.Migrations
                 {
                     b.HasOne("BookWebApi.Models.Entities.Author", "Author")
                         .WithMany("Books")
-                        .HasForeignKey("AuthorId1")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

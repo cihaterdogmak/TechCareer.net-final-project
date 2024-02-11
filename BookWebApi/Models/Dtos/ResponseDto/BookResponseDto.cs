@@ -1,13 +1,14 @@
-namespace BookWebApi.Models.Dtos.RequestDto;
+namespace BookWebApi.Models.Dtos.ResponseDto;
 
-public class BookUpdateRequestDto
+public class BookResponseDto
 {
+
     public int Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
-    public int AuthorId { get; set; }
-    public int CategoryId { get; set; }
+    public string AuthorName { get; set; }
+    public string CategoryString { get; set; }
     public double Price { get; set; }
     public int Stock { get; set; }
-    
+ 
 }

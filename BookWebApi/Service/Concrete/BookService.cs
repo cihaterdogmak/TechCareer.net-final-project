@@ -1,8 +1,10 @@
 using AutoMapper;
 using BookWebApi.Models.Dtos.RequestDto;
+using BookWebApi.Models.Dtos.ResponseDto;
 using BookWebApi.Models.Entities;
 using BookWebApi.Repository;
 using BookWebApi.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookWebApi.Service.Concrete;
 
@@ -70,5 +72,89 @@ public class BookService: IBookService
         } 
         _context.Books.Remove(book);
         _context.SaveChanges();
+    }
+
+    public List<BookResponseDto> GetAllDetails()
+    {
+        List<Book> books = _context.Books
+            .Include(x => x.Author)
+            .Include(x => x.Category)
+            .ToList();
+        List<BookResponseDto> responses = _mapper
+            .Map<List<BookResponseDto>>(books);
+
+        return responses;
+    }
+
+    public BookResponseDto GetDetailsById(int id)
+    {
+        Book? book = _context.Books
+            .Include(x => x.Author)
+            .Include(x => x.Category)
+            .SingleOrDefault(x => x.Id == id);
+
+        if (book == null)
+        {
+            throw new Exception($"id {id} kitap bulunamadı.");
+        }
+
+        BookResponseDto response = _mapper.Map<BookResponseDto>(book);
+        return response;
+    }
+
+    public List<BookResponseDto> GetByCategoryId(int categoryId)
+    {
+        List<Book> books = _context.Books
+            .Include(x => x.Author)
+            .Include(x => x.Category)
+            .Where(x=>x.CategoryId==categoryId)
+            .ToList();
+
+        List<BookResponseDto> responses = _mapper
+            .Map<List<BookResponseDto>>(books);
+        
+        return responses;
+    }
+
+    public List<BookResponseDto> GetByAuthorId(int authorId)
+    {
+        List<Book> books = _context.Books
+            .Include(x => x.Author)
+            .Include(x => x.Category)
+            .Where(x=>x.AuthorId==authorId)
+            .ToList();
+
+        List<BookResponseDto> responses = _mapper
+            .Map<List<BookResponseDto>>(books);
+        
+          return responses;
+    }
+
+    public List<BookResponseDto> GetByPriceRangeDetails(double min, double max)
+    {
+        List<Book> books = _context.Books
+            .Include(x => x.Author)
+            .Include(x => x.Category)
+            .Where(x=>x.Price<=max && x.Price>min)
+            .ToList();
+
+        List<BookResponseDto> responses = _mapper
+            .Map<List<BookResponseDto>>(books);
+        
+        return responses;
+    }
+
+    public List<BookResponseDto> GetByTitleContains(string title)
+    {
+        List<Book> books = _context.Books
+            .Include(x => x.Author)
+            .Include(x => x.Category)
+            .Where(x=>x.Title==title)
+            .ToList();
+
+        List<BookResponseDto> responses = _mapper
+            .Map<List<BookResponseDto>>(books);
+        
+        return responses;
     }
 }

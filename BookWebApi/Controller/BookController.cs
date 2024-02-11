@@ -1,7 +1,9 @@
 
 using BookWebApi.Models.Dtos.RequestDto;
+using BookWebApi.Models.Dtos.ResponseDto;
 using BookWebApi.Models.Entities;
 using BookWebApi.Service.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookWebApi.Controller;
@@ -56,8 +58,54 @@ public class BookController : ControllerBase
         _service.Delete(id);
         return Ok("Silme başarılı.");
     }
+
+
+    [HttpGet("getalldetails")]
+    public IActionResult GetAllDetails()
+    {
+        List<BookResponseDto> result = _service.GetAllDetails();
+        return Ok(result); 
+    }
+
+    [HttpGet("getdetailsbyid")]
+    public IActionResult GetDetailsById([FromQuery] int id)
+    {
+        BookResponseDto result = _service.GetDetailsById(id);
+        return Ok(result);
+    }
+        
+    [HttpGet("getbycategoryid")]
+    public IActionResult GetByCategoryId([FromQuery]int categoryId)
+    {
+        List<BookResponseDto> result = _service.GetByCategoryId(categoryId);
+        return Ok(result);
+        
+    }
+    
+    [HttpGet("getbyauthorid")]
+    public IActionResult GetByAuthorId([FromQuery] int authorId)
+    {
+        List<BookResponseDto> result = _service.GetByAuthorId(authorId);
+        return Ok(result);
+    }
+
+    [HttpGet("getbypricerange")]
+    public IActionResult GetByPriceRangeDetails([FromQuery] double min, [FromQuery] double max)
+    {
+        List<BookResponseDto> result = _service.GetByPriceRangeDetails(min, max);
+        return Ok(result);
+    }
+
+    [HttpGet("getbytitecontains")]
+    public IActionResult GetByTitleContains([FromQuery] string title)
+    {
+        List<BookResponseDto> result = _service.GetByTitleContains(title);
+        return Ok(result); 
+    }
     
     
+    
+
 
 
 
