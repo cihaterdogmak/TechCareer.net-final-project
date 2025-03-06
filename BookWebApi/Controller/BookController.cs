@@ -52,6 +52,15 @@ public class BookController : ControllerBase
         return Ok("Ekleme başarılı.");
     }
 
+    [HttpPost("addmultiple")]
+    public IActionResult AddMultiple([FromBody] List<BookAddRequestDto> dtos)
+    {
+        if (dtos == null || dtos.Count == 0)
+            return BadRequest("Boş kitap listesi gönderilemez.");
+        _service.AddMultiple(dtos);
+        return Ok($"{dtos.Count} kitap başarıyla eklendi.");
+    }
+    
     [HttpDelete("delete")]
     public IActionResult Delete([FromQuery] int id)
     {

@@ -26,7 +26,7 @@ public class BaseDbContext : DbContext
     */
 public class BaseDbContext : DbContext
 {
-
+ 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql(@"Host=localhost; Database=tc_book_db; Username=postgres; Password=1234");
 

@@ -3,6 +3,7 @@ using BookWebApi.Models.Dtos.RequestDto;
 using BookWebApi.Models.Entities;
 using BookWebApi.Repository;
 using BookWebApi.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookWebApi.Service.Concrete;
 
@@ -25,10 +26,19 @@ public class AuthorService : IAuthorService
         _context.Authors.Add(author);
         _context.SaveChanges();
     }
+    
+    public void AddMultiple(List<AuthorAddRequestDto> dtos)
+    {
+        List<Author> newAuthors = _mapper.Map<List<Author>>(dtos);
+        _context.Authors.AddRange(newAuthors);
+        _context.SaveChanges();
+    }
 
     public List<Author> GetAll()
     {
-        List<Author> authors = _context.Authors.ToList();
+        List<Author> authors = _context.Authors
+            .Include(x => x.Books)
+            .ToList();
         return authors;
     }
 

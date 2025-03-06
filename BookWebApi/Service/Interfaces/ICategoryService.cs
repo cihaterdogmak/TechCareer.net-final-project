@@ -9,4 +9,6 @@ public interface ICategoryService
     Category GetById(int id);
 
     void Add(CategoryAddRequestDto category);
+    void AddMultiple(List<CategoryAddRequestDto> categories);
+    
 }

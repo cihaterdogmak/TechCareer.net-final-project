@@ -10,6 +10,7 @@ public interface IBookService
     Book GetById(int id);
     void Update(BookUpdateRequestDto dto);
     void Add(BookAddRequestDto dto);
+    void AddMultiple(List<BookAddRequestDto> dtos);
     void Delete(int id);
     List<BookResponseDto> GetAllDetails();
     BookResponseDto GetDetailsById(int id);

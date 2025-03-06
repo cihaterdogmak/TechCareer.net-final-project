@@ -62,6 +62,14 @@ public class BookService: IBookService
         _context.SaveChanges();
         
     }
+    
+    public void AddMultiple(List<BookAddRequestDto> dtos)
+    {
+        List<Book> newBook = _mapper.Map<List<Book>>(dtos);
+        _context.Books.AddRange(newBook);
+        _context.SaveChanges();
+        
+    }
 
     public void Delete(int id)
     {

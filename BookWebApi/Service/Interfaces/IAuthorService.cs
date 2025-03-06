@@ -6,6 +6,7 @@ namespace BookWebApi.Service.Interfaces;
 public interface IAuthorService
 {
     void Add(AuthorAddRequestDto dto);
+    void AddMultiple(List<AuthorAddRequestDto> dtos);
     
     List<Author> GetAll();
     

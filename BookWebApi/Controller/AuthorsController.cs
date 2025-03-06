@@ -23,6 +23,16 @@ public class AuthorsController : ControllerBase
         _service.Add(dto);
         return Ok(dto);
     }
+    
+    [HttpPost("addmultiple")]
+    public IActionResult AddMultiple([FromBody] List<AuthorAddRequestDto> dtos)
+    {
+        if (dtos == null || dtos.Count == 0)
+            return BadRequest("Boş yazar listesi gönderilemez.");
+
+        _service.AddMultiple(dtos);
+        return Ok($"{dtos.Count} yazar başarıyla eklendi.");
+    }
 
     [HttpGet("getall")]
     public IActionResult GetAll()

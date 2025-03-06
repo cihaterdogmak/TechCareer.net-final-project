@@ -39,5 +39,12 @@ public class CategoryController : ControllerBase
         _categoryService.Add(dto);
         return Ok();
     }
+    
+    [HttpPost("addmultiple")]
+    public IActionResult AddMultiple([FromBody] List<CategoryAddRequestDto> dtos)
+    {
+        _categoryService.AddMultiple(dtos);
+        return Ok($"{dtos.Count} kategori başarıyla eklendi.");
+    }
 
 }

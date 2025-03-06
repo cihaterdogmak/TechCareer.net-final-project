@@ -26,6 +26,13 @@ public class CategoryService : ICategoryService
 
     }
     
+    public void AddMultiple(List<CategoryAddRequestDto> categories)
+    {
+        List<Category> newCategories = _mapper.Map<List<Category>>(categories);
+        _context.Categories.AddRange(newCategories);
+        _context.SaveChanges();
+    }
+    
     public List<Category> GetAll()
     {
         List<Category> result = _context.Categories.ToList();
