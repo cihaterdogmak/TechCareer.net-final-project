@@ -36,9 +36,7 @@ public class AuthorService : IAuthorService
 
     public List<Author> GetAll()
     {
-        List<Author> authors = _context.Authors
-            .Include(x => x.Books)
-            .ToList();
+        List<Author> authors = _context.Authors.ToList();
         return authors;
     }
 
