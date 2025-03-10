@@ -17,7 +17,7 @@ namespace BookWebApi.Controller;
 [ApiController]
 public class BookController : ControllerBase
 {
-    
+
     private readonly IBookService _service;
     public BookController(IBookService service)
     {
@@ -25,114 +25,47 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("getall")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        List<Book> books = _service.GetAll();
+        var books = await _service.GetAllAsync();
         return Ok(books);
     }
-    
+
     [HttpGet("getbyid")]
-    public IActionResult GetById([FromQuery] int id)
+    public async Task<IActionResult> GetById([FromQuery] int id)
     {
-        Book book = _service.GetById(id);
+        var book = await _service.GetByIdAsync(id);
         return Ok(book);
     }
 
-    [HttpPut("update")]
-    public IActionResult Update([FromBody] BookUpdateRequestDto dto)
-    {
-        _service.Update(dto);
-        return Ok("Güncelleme Başarılı.");
-    }
-
     [HttpPost("add")]
-    public IActionResult Add([FromBody] BookAddRequestDto dto)
+    public async Task<IActionResult> Add([FromBody] BookAddRequestDto dto)
     {
-        _service.Add(dto);
+        await _service.AddAsync(dto);
         return Ok("Ekleme başarılı.");
     }
 
-    [HttpPost("addmultiple")]
-    public IActionResult AddMultiple([FromBody] List<BookAddRequestDto> dtos)
-    {
-        if (dtos == null || dtos.Count == 0)
-            return BadRequest("Boş kitap listesi gönderilemez.");
-        _service.AddMultiple(dtos);
-        return Ok($"{dtos.Count} kitap başarıyla eklendi.");
-    }
-    
     [HttpDelete("delete")]
-    public IActionResult Delete([FromQuery] int id)
+    public async Task<IActionResult> Delete([FromQuery] int id)
     {
-        _service.Delete(id);
+        await _service.DeleteAsync(id);
         return Ok("Silme başarılı.");
     }
 
-
     [HttpGet("getalldetails")]
-    public IActionResult GetAllDetails()
+    public async Task<IActionResult> GetAllDetails()
     {
-        List<BookResponseDto> result = _service.GetAllDetails();
-        return Ok(result); 
-    }
-
-    [HttpGet("getdetailsbyid")]
-    public IActionResult GetDetailsById([FromQuery] int id)
-    {
-        BookResponseDto result = _service.GetDetailsById(id);
+        var result = await _service.GetAllDetailsAsync();
         return Ok(result);
     }
-        
+
+
     [HttpGet("getbycategoryid")]
-    public IActionResult GetByCategoryId([FromQuery]int categoryId)
+    public async Task<IActionResult> GetByCategoryId([FromQuery] int categoryId)
     {
-        List<BookResponseDto> result = _service.GetByCategoryId(categoryId);
-        return Ok(result);
-        
+        var books = await _service.GetByCategoryIdAsync(categoryId);
+        return Ok(books);
     }
-    
-    [HttpGet("getbyauthorid")]
-    public IActionResult GetByAuthorId([FromQuery] int authorId)
-    {
-        List<BookResponseDto> result = _service.GetByAuthorId(authorId);
-        return Ok(result);
-    }
-
-    [HttpGet("getbypricerange")]
-    public IActionResult GetByPriceRangeDetails([FromQuery] double min, [FromQuery] double max)
-    {
-        List<BookResponseDto> result = _service.GetByPriceRangeDetails(min, max);
-        return Ok(result);
-    }
-
-    [HttpGet("getbytitecontains")]
-    public IActionResult GetByTitleContains([FromQuery] string title)
-    {
-        List<BookResponseDto> result = _service.GetByTitleContains(title);
-        return Ok(result); 
-    }
-    
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

@@ -6,163 +6,86 @@ using BookWebApi.Repository;
 using BookWebApi.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookWebApi.Service.Concrete;
-
-//Repository Pattern yöntemi kullanıldı IBookService interface ini kullanarak gerekli satırları iplemente edilmiştir.
-public class BookService : IBookService
+namespace BookWebApi.Service.Concrete
 {
-
-
-    private readonly BaseDbContext _context;
-    private readonly IMapper _mapper;
-
-    public BookService(BaseDbContext context, IMapper mapper)
+    public class BookService : IBookService
     {
-        _context = context;
-        _mapper = mapper;
-    }
+        private readonly IBookRepository _bookRepository;
+        private readonly IMapper _mapper;
 
-
-
-    public List<Book> GetAll()
-    {
-        List<Book> books = _context.Books.ToList();
-        return books;
-    }
-
-    public Book GetById(int id)
-    {
-        Book? book = _context.Books.Find(id);
-        if (book == null)
+        public BookService(IBookRepository bookRepository, IMapper mapper)
         {
-            throw new Exception($"id : {id} kitap bulunamadı.");
-        }
-        return book;
-    }
-
-    public void Update(BookUpdateRequestDto dto)
-    {
-        Book? book = _context.Books.Find(dto.Id);
-        if (book == null)
-        {
-            throw new Exception($"id : {dto.Id} kitap bulunamadı.");
+            _bookRepository = bookRepository;
+            _mapper = mapper;
         }
 
-        Book updatedBook = _mapper.Map<Book>(dto);
-        _context.Books.Update(updatedBook);
-        _context.SaveChanges();
-
-
-    }
-
-    public void Add(BookAddRequestDto dto)
-    {
-        Book book = _mapper.Map<Book>(dto);
-        _context.Books.Add(book);
-        _context.SaveChanges();
-
-    }
-
-    public void AddMultiple(List<BookAddRequestDto> dtos)
-    {
-        List<Book> newBook = _mapper.Map<List<Book>>(dtos);
-        _context.Books.AddRange(newBook);
-        _context.SaveChanges();
-
-    }
-
-    public void Delete(int id)
-    {
-        Book? book = _context.Books.Find(id);
-        if (book == null)
+        public async Task<List<Book>> GetAllAsync()
         {
-            throw new Exception($"id : {id} kitap bulunamadı");
-        }
-        _context.Books.Remove(book);
-        _context.SaveChanges();
-    }
-
-    public List<BookResponseDto> GetAllDetails()
-    {
-        List<Book> books = _context.Books
-            .Include(x => x.Author)
-            .Include(x => x.Category)
-            .ToList();
-        List<BookResponseDto> responses = _mapper
-            .Map<List<BookResponseDto>>(books);
-
-        return responses;
-    }
-
-    public BookResponseDto GetDetailsById(int id)
-    {
-        Book? book = _context.Books
-            .Include(x => x.Author)
-            .Include(x => x.Category)
-            .SingleOrDefault(x => x.Id == id);
-
-        if (book == null)
-        {
-            throw new Exception($"id {id} kitap bulunamadı.");
+            return await _bookRepository.GetAllAsync();
         }
 
-        BookResponseDto response = _mapper.Map<BookResponseDto>(book);
-        return response;
-    }
+        public async Task<Book> GetByIdAsync(int id)
+        {
+            return await _bookRepository.GetByIdAsync(id);
+        }
 
-    public List<BookResponseDto> GetByCategoryId(int categoryId)
-    {
-        List<Book> books = _context.Books
-            .Include(x => x.Author)
-            .Include(x => x.Category)
-            .Where(x => x.CategoryId == categoryId)
-            .ToList();
+        public async Task AddAsync(BookAddRequestDto dto)
+        {
+            var book = _mapper.Map<Book>(dto);
+            await _bookRepository.AddAsync(book);
+        }
 
-        List<BookResponseDto> responses = _mapper
-            .Map<List<BookResponseDto>>(books);
+        public async Task UpdateAsync(BookUpdateRequestDto dto)
+        {
+            var existingBook = await _bookRepository.GetByIdAsync(dto.Id);
+            if (existingBook == null)
+                throw new Exception($"id : {dto.Id} kitap bulunamadı.");
 
-        return responses;
-    }
+            _mapper.Map(dto, existingBook);
+            await _bookRepository.UpdateAsync(existingBook);
+        }
 
-    public List<BookResponseDto> GetByAuthorId(int authorId)
-    {
-        List<Book> books = _context.Books
-            .Include(x => x.Author)
-            .Include(x => x.Category)
-            .Where(x => x.AuthorId == authorId)
-            .ToList();
+        public async Task DeleteAsync(int id)
+        {
+            await _bookRepository.DeleteAsync(id);
+        }
 
-        List<BookResponseDto> responses = _mapper
-            .Map<List<BookResponseDto>>(books);
+        public async Task<List<BookResponseDto>> GetAllDetailsAsync()
+        {
+            var books = await _bookRepository.GetAllDetailsAsync();
+            return _mapper.Map<List<BookResponseDto>>(books);
+        }
 
-        return responses;
-    }
+        public async Task<BookResponseDto> GetDetailsByIdAsync(int id)
+        {
+            var book = await _bookRepository.GetByIdAsync(id);
+            return _mapper.Map<BookResponseDto>(book);
+        }
 
-    public List<BookResponseDto> GetByPriceRangeDetails(double min, double max)
-    {
-        List<Book> books = _context.Books
-            .Include(x => x.Author)
-            .Include(x => x.Category)
-            .Where(x => x.Price <= max && x.Price > min)
-            .ToList();
+        public async Task<List<BookResponseDto>> GetByCategoryIdAsync(int categoryId)
+        {
+            var books = await _bookRepository.GetBooksByCategoryIdAsync(categoryId);
+            return _mapper.Map<List<BookResponseDto>>(books);
+        }
 
-        List<BookResponseDto> responses = _mapper
-            .Map<List<BookResponseDto>>(books);
+        public async Task<List<BookResponseDto>> GetByAuthorIdAsync(int authorId)
+        {
+            var books = await _bookRepository.GetBooksByAuthorIdAsync(authorId);
+            return _mapper.Map<List<BookResponseDto>>(books);
+        }
 
-        return responses;
-    }
+        public async Task<List<BookResponseDto>> GetByPriceRangeDetailsAsync(double min, double max)
+        {
+            var books = await _bookRepository.GetAllAsync();
+            var filteredBooks = books.Where(b => b.Price >= min && b.Price <= max).ToList();
+            return _mapper.Map<List<BookResponseDto>>(filteredBooks);
+        }
 
-    public List<BookResponseDto> GetByTitleContains(string title)
-    {
-        List<Book> books = _context.Books
-            .Include(x => x.Author)
-            .Include(x => x.Category)
-            .Where(x => x.Title == title)
-            .ToList();
-
-        List<BookResponseDto> responses = _mapper
-            .Map<List<BookResponseDto>>(books);
-
-        return responses;
+        public async Task<List<BookResponseDto>> GetByTitleContainsAsync(string title)
+        {
+            var books = await _bookRepository.GetAllAsync();
+            var filteredBooks = books.Where(b => b.Title.Contains(title, StringComparison.OrdinalIgnoreCase)).ToList();
+            return _mapper.Map<List<BookResponseDto>>(filteredBooks);
+        }
     }
 }
