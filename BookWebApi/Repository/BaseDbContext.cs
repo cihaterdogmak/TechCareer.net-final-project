@@ -16,7 +16,20 @@ public class BaseDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(Configuration.GetConnectionString("WebApiDatabase"));
+        var provider = Configuration.GetValue<string>("DatabaseProvider");
+
+        if (provider == "PostgreSQL")
+        {
+            optionsBuilder.UseNpgsql(Configuration.GetConnectionString("PostgreSQLDatabase"));
+        }
+        else if (provider == "SQLServer")
+        {
+            optionsBuilder.UseSqlServer(Configuration.GetConnectionString("SSMSDatabase"));
+        }
+        else
+        {
+            throw new Exception("Invalid database provider specified in configuration.");
+        }
     }
 
     public DbSet<Book> Books { get; set; }
